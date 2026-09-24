@@ -1,167 +1,544 @@
-const defaultAccounts = [
-    { name: "Admin", email: "admin@ems.local", password: "admin123", role: "Admin" },
-    { name: "HR Manager", email: "hr@ems.local", password: "hr123", role: "HR" }
+let selectedRole = "Admin";
+
+
+/* ================= DEMO ACCOUNTS ================= */
+
+const demoAccounts = [
+    {
+        name: "Admin User",
+        email: "admin@ems.com",
+        password: "admin123",
+        role: "Admin"
+    },
+    {
+        name: "HR Manager",
+        email: "hr@ems.com",
+        password: "hr123",
+        role: "HR Manager"
+    },
+    {
+        name: "Employee User",
+        email: "employee@ems.com",
+        password: "emp123",
+        role: "Employee"
+    }
 ];
 
-const employeeManagers = ["Admin", "HR"];
-const accountsKey = "emsAccounts";
-const sessionKey = "emsSession";
 
-let accounts = JSON.parse(localStorage.getItem(accountsKey) || "null") || defaultAccounts;
-let currentUser = JSON.parse(localStorage.getItem(sessionKey) || "null");
+/* ================= ROLE ================= */
 
-function showPage(pageId) {
-    if (!currentUser) return;
-    document.querySelectorAll(".page").forEach(page => page.classList.remove("active-page"));
-    document.getElementById(pageId).classList.add("active-page");
-    const titles = { dashboard: "Dashboard", employees: "Employees", attendance: "Attendance", leave: "Leave Management", payroll: "Payroll", performance: "Performance" };
-    document.getElementById("pageTitle").innerText = titles[pageId];
-    window.scrollTo({ top: 0, behavior: "smooth" });
+function selectRole(role, button) {
+
+    selectedRole = role;
+
+    document.getElementById("loginRole").value = role;
+
+    document.querySelectorAll(".role").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle("dark");
-    const icon = document.querySelector(".icon-btn i");
-    icon.classList.toggle("fa-moon");
-    icon.classList.toggle("fa-sun");
+
+/* ================= AUTH SWITCH ================= */
+
+function showSignup() {
+
+    document.getElementById("loginCard").style.display = "none";
+    document.getElementById("signupCard").style.display = "block";
 }
 
-function openModal() {
-    if (!employeeManagers.includes(currentUser?.role)) {
-        alert("Only Admin and HR can add employees.");
+
+function showLogin() {
+
+    document.getElementById("signupCard").style.display = "none";
+    document.getElementById("loginCard").style.display = "block";
+}
+
+
+/* ================= LOGIN ================= */
+
+function login() {
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    const role =
+        document.getElementById("loginRole").value;
+
+
+    if (!email || !password) {
+        alert("Please enter email and password.");
         return;
     }
-    document.getElementById("employeeModal").classList.add("show");
-}
 
-function closeModal() {
-    document.getElementById("employeeModal").classList.remove("show");
-    document.getElementById("employeeForm").reset();
-}
 
-function setAuthMessage(message, isError = true) {
-    const authMessage = document.getElementById("authMessage");
-    authMessage.textContent = message;
-    authMessage.classList.toggle("error", isError);
-}
+    let account = demoAccounts.find(user =>
+        user.email === email &&
+        user.password === password &&
+        user.role === role
+    );
 
-function switchAuthMode() {
-    const signInForm = document.getElementById("signInForm");
-    const signUpForm = document.getElementById("signUpForm");
-    const isSignIn = !signInForm.classList.contains("hidden");
-    signInForm.classList.toggle("hidden", isSignIn);
-    signUpForm.classList.toggle("hidden", !isSignIn);
-    document.getElementById("authTitle").textContent = isSignIn ? "Create your account" : "Welcome back";
-    document.getElementById("authSubtitle").textContent = isSignIn ? "Create an employee account for your organization." : "Sign in to manage your employee workspace.";
-    document.getElementById("authSwitch").textContent = isSignIn ? "Already have an account? Sign in" : "Need an account? Sign up";
-    setAuthMessage("");
-}
 
-function initials(name) {
-    return name.split(" ").map(part => part[0]).join("").slice(0, 2).toUpperCase();
-}
+    const savedAccounts =
+        JSON.parse(localStorage.getItem("emsAccounts")) || [];
 
-function updateUserInterface() {
-    const roleLabel = currentUser.role === "Admin" ? "Administrator" : currentUser.role;
-    const userInitials = initials(currentUser.name);
-    document.getElementById("sidebarAvatar").textContent = userInitials;
-    document.getElementById("sidebarName").textContent = currentUser.name;
-    document.getElementById("sidebarRole").textContent = roleLabel;
-    document.getElementById("profileAvatar").textContent = userInitials;
-    document.getElementById("profileName").textContent = currentUser.name;
-    document.getElementById("profileRole").textContent = roleLabel;
-    document.getElementById("topbarWelcome").textContent = `Welcome back, ${currentUser.name}`;
-    document.getElementById("welcomeHeading").textContent = `Good Morning, ${currentUser.name}!`;
-    const canManageEmployees = employeeManagers.includes(currentUser.role);
-    document.querySelectorAll(".manage-employees, .employee-actions").forEach(element => element.classList.toggle("hidden", !canManageEmployees));
-}
 
-function signIn(event) {
-    event.preventDefault();
-    const email = document.getElementById("signInEmail").value.trim().toLowerCase();
-    const password = document.getElementById("signInPassword").value;
-    const account = accounts.find(item => item.email.toLowerCase() === email && item.password === password);
+    const savedAccount = savedAccounts.find(user =>
+        user.email === email &&
+        user.password === password &&
+        user.role === role
+    );
+
+
     if (!account) {
-        setAuthMessage("The email or password is incorrect.");
+        account = savedAccount;
+    }
+
+
+    if (!account) {
+        alert("Invalid email, password or role.");
         return;
     }
-    currentUser = { name: account.name, email: account.email, role: account.role };
-    localStorage.setItem(sessionKey, JSON.stringify(currentUser));
-    enterApplication();
+
+
+    localStorage.setItem(
+        "emsCurrentUser",
+        JSON.stringify(account)
+    );
+
+
+    openApplication(account);
 }
 
-function signUp(event) {
-    event.preventDefault();
-    const name = document.getElementById("signUpName").value.trim();
-    const email = document.getElementById("signUpEmail").value.trim().toLowerCase();
-    const password = document.getElementById("signUpPassword").value;
-    if (accounts.some(account => account.email.toLowerCase() === email)) {
-        setAuthMessage("An account already exists for this email.");
+
+/* ================= CREATE ACCOUNT ================= */
+
+function createAccount() {
+
+    const name =
+        document.getElementById("signupName").value.trim();
+
+    const email =
+        document.getElementById("signupEmail").value.trim();
+
+    const phone =
+        document.getElementById("signupPhone").value.trim();
+
+    const role =
+        document.getElementById("signupRole").value;
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    const confirm =
+        document.getElementById("signupConfirm").value;
+
+
+    if (!name || !email || !phone || !password || !confirm) {
+        alert("Please fill all fields.");
         return;
     }
-    const account = { name, email, password, role: "Employee" };
-    accounts.push(account);
-    localStorage.setItem(accountsKey, JSON.stringify(accounts));
-    currentUser = { name, email, role: "Employee" };
-    localStorage.setItem(sessionKey, JSON.stringify(currentUser));
-    enterApplication();
-}
 
-function enterApplication() {
-    document.getElementById("authScreen").classList.add("hidden");
-    document.querySelector(".container").classList.remove("hidden");
-    updateUserInterface();
-}
 
-function logOut() {
-    currentUser = null;
-    localStorage.removeItem(sessionKey);
-    document.querySelector(".container").classList.add("hidden");
-    document.getElementById("authScreen").classList.remove("hidden");
-    document.getElementById("signInForm").reset();
-    setAuthMessage("");
-}
-
-function addEmployee(event) {
-    event.preventDefault();
-    if (!employeeManagers.includes(currentUser?.role)) {
-        alert("Only Admin and HR can add employees.");
+    if (password !== confirm) {
+        alert("Passwords do not match.");
         return;
     }
-    const name = document.getElementById("employeeName").value.trim();
-    const employeeId = document.getElementById("employeeId").value.trim();
-    const department = document.getElementById("employeeDepartment").value;
-    const position = document.getElementById("employeePosition").value.trim();
-    const salary = document.getElementById("employeeSalary").value;
-    const row = document.createElement("tr");
-    row.innerHTML = `<td><div class="employee"><div class="employee-avatar">${initials(name)}</div><div><b>${name}</b><small>${employeeId}</small></div></div></td><td>${department}</td><td>${position}</td><td>₹${Number(salary).toLocaleString("en-IN")}</td><td><span class="status active">Active</span></td><td class="employee-actions"><button class="action-btn remove-employee" type="button">Remove</button></td>`;
-    document.getElementById("employeeTableBody").appendChild(row);
-    closeModal();
-}
 
-document.getElementById("signInForm").addEventListener("submit", signIn);
-document.getElementById("signUpForm").addEventListener("submit", signUp);
-document.getElementById("authSwitch").addEventListener("click", switchAuthMode);
-document.getElementById("employeeForm").addEventListener("submit", addEmployee);
-document.getElementById("logoutButton").addEventListener("click", logOut);
-document.getElementById("employeeSearch").addEventListener("keyup", function() {
-    const searchValue = this.value.toLowerCase();
-    document.querySelectorAll("#employeeTable tbody tr").forEach(row => row.style.display = row.innerText.toLowerCase().includes(searchValue) ? "" : "none");
-});
-document.getElementById("employeeTableBody").addEventListener("click", function(event) {
-    if (!event.target.classList.contains("remove-employee")) return;
-    if (!employeeManagers.includes(currentUser?.role)) {
-        alert("Only Admin and HR can remove employees.");
+
+    const accounts =
+        JSON.parse(localStorage.getItem("emsAccounts")) || [];
+
+
+    const exists =
+        demoAccounts.some(user => user.email === email) ||
+        accounts.some(user => user.email === email);
+
+
+    if (exists) {
+        alert("An account with this email already exists.");
         return;
     }
-    if (confirm("Remove this employee from the table?")) event.target.closest("tr").remove();
-});
-document.querySelector(".notification-btn").addEventListener("click", function() {
-    alert("Notifications:\n\n• 3 leave requests pending\n• 2 employee birthdays this week\n• Payroll processing is pending");
-});
-window.addEventListener("click", function(event) {
-    if (event.target === document.getElementById("employeeModal")) closeModal();
-});
 
-if (currentUser) enterApplication();
-else document.querySelector(".container").classList.add("hidden");
+
+    const newAccount = {
+        name,
+        email,
+        phone,
+        role,
+        password
+    };
+
+
+    accounts.push(newAccount);
+
+
+    localStorage.setItem(
+        "emsAccounts",
+        JSON.stringify(accounts)
+    );
+
+
+    alert("Account created successfully!");
+
+
+    document.getElementById("loginEmail").value = email;
+
+
+    selectedRole = role;
+    document.getElementById("loginRole").value = role;
+
+
+    document.querySelectorAll(".role").forEach(btn => {
+
+        btn.classList.remove("active");
+
+        if (btn.textContent.trim() === role) {
+            btn.classList.add("active");
+        }
+
+    });
+
+
+    showLogin();
+}
+
+
+/* ================= OPEN APPLICATION ================= */
+
+function openApplication(user) {
+
+    document.getElementById("authPage").style.display = "none";
+
+    document.getElementById("application").style.display = "block";
+
+
+    document.getElementById("topName").textContent =
+        user.name;
+
+    document.getElementById("sideName").textContent =
+        user.name;
+
+    document.getElementById("welcomeName").textContent =
+        user.name.split(" ")[0];
+
+
+    document.getElementById("topRole").textContent =
+        user.role;
+
+    document.getElementById("sideRole").textContent =
+        user.role;
+
+
+    const initial =
+        user.name.charAt(0).toUpperCase();
+
+
+    document.getElementById("topAvatar").textContent =
+        initial;
+
+    document.getElementById("sideAvatar").textContent =
+        initial;
+
+
+    applyRolePermissions(user.role);
+
+
+    showPage(
+        "dashboard",
+        document.querySelector(".nav-link")
+    );
+}
+
+
+/* ================= ROLE PERMISSIONS ================= */
+
+function applyRolePermissions(role) {
+
+    const links =
+        document.querySelectorAll(".nav-link");
+
+
+    links.forEach(link => {
+        link.style.display = "flex";
+    });
+
+
+    if (role === "HR Manager") {
+
+        // Payroll
+        links[4].style.display = "none";
+
+    }
+
+
+    if (role === "Employee") {
+
+        // Employees
+        links[1].style.display = "none";
+
+        // Payroll remains visible
+        // Employee can view salary
+
+    }
+}
+
+
+/* ================= PAGE NAVIGATION ================= */
+
+function showPage(pageId, button) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+
+    const page =
+        document.getElementById(pageId);
+
+
+    if (page) {
+        page.classList.add("active");
+    }
+
+
+    document.querySelectorAll(".nav-link").forEach(link => {
+        link.classList.remove("active");
+    });
+
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+
+    const pageInfo = {
+
+        dashboard: [
+            "Dashboard",
+            "Here's what's happening with your workforce today."
+        ],
+
+        employees: [
+            "Employee Management",
+            "Manage your organization's employees."
+        ],
+
+        attendance: [
+            "Attendance",
+            "Monitor daily employee attendance."
+        ],
+
+        leave: [
+            "Leave Management",
+            "Review and manage employee leave requests."
+        ],
+
+        payroll: [
+            "Payroll",
+            "Manage salary and payroll information."
+        ],
+
+        performance: [
+            "Performance",
+            "Track employee performance and productivity."
+        ]
+
+    };
+
+
+    if (pageInfo[pageId]) {
+
+        document.getElementById("pageTitle").textContent =
+            pageInfo[pageId][0];
+
+        document.getElementById("pageSub").textContent =
+            pageInfo[pageId][1];
+    }
+}
+
+
+/* ================= DATE ================= */
+
+function setDate() {
+
+    const date = new Date();
+
+    const options = {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    };
+
+    document.getElementById("currentDate").textContent =
+        date.toLocaleDateString("en-IN", options);
+}
+
+
+/* ================= EMPLOYEE MODAL ================= */
+
+function openEmployeeModal() {
+
+    document.getElementById("employeeModal").style.display =
+        "flex";
+}
+
+
+function closeEmployeeModal() {
+
+    document.getElementById("employeeModal").style.display =
+        "none";
+}
+
+
+/* ================= ADD EMPLOYEE ================= */
+
+function addEmployee() {
+
+    const name =
+        document.getElementById("newName").value.trim();
+
+    const department =
+        document.getElementById("newDepartment").value;
+
+    const position =
+        document.getElementById("newPosition").value.trim();
+
+
+    if (!name || !position) {
+        alert("Please enter employee details.");
+        return;
+    }
+
+
+    const initials =
+        name
+        .split(" ")
+        .map(word => word[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+
+
+    const row =
+        document.createElement("tr");
+
+
+    row.innerHTML = `
+
+        <td>
+            <div class="employee-cell">
+
+                <div class="person-avatar">
+                    ${initials}
+                </div>
+
+                <div>
+                    <strong>${name}</strong>
+                    <small>
+                        ${name.toLowerCase().replaceAll(" ", ".")}@company.com
+                    </small>
+                </div>
+
+            </div>
+        </td>
+
+        <td>${department}</td>
+
+        <td>${position}</td>
+
+        <td>
+            <span class="status active">
+                Active
+            </span>
+        </td>
+
+        <td>
+            <button class="edit-btn">
+                Edit
+            </button>
+        </td>
+    `;
+
+
+    document
+        .querySelector("#employeeTable tbody")
+        .appendChild(row);
+
+
+    document.getElementById("newName").value = "";
+    document.getElementById("newPosition").value = "";
+
+
+    closeEmployeeModal();
+
+    alert("Employee added successfully!");
+}
+
+
+/* ================= SEARCH ================= */
+
+function searchEmployees() {
+
+    const search =
+        document.getElementById("employeeSearch")
+        .value
+        .toLowerCase();
+
+
+    document
+        .querySelectorAll("#employeeTable tbody tr")
+        .forEach(row => {
+
+            const text =
+                row.innerText.toLowerCase();
+
+            row.style.display =
+                text.includes(search) ? "" : "none";
+
+        });
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    localStorage.removeItem("emsCurrentUser");
+
+    document.getElementById("application").style.display =
+        "none";
+
+    document.getElementById("authPage").style.display =
+        "grid";
+
+    document.getElementById("loginEmail").value = "";
+    document.getElementById("loginPassword").value = "";
+
+    showLogin();
+}
+
+
+/* ================= LOAD ================= */
+
+window.addEventListener("load", () => {
+
+    setDate();
+
+
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem("emsCurrentUser")
+        );
+
+
+    if (currentUser) {
+        openApplication(currentUser);
+    }
+
+});

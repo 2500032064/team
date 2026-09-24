@@ -3,162 +3,335 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System</title>
-
+    <title>EMS | Employee Management System</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
 
-<section class="auth-screen" id="authScreen">
-    <div class="auth-panel">
+<!-- ================= AUTH ================= -->
+
+<div class="auth-page" id="authPage">
+
+    <div class="auth-left">
         <div class="auth-brand">
-            <div class="auth-logo"><i class="fa-solid fa-users"></i></div>
-            <div>
-                <strong>EMS</strong>
-                <span>Employee Management System</span>
+            <div class="brand-logo">EMS</div>
+            <span>EmployeeHub</span>
+        </div>
+
+        <div class="auth-content">
+            <span class="eyebrow">SMART WORKFORCE MANAGEMENT</span>
+            <h1>Manage your workforce<br><span>smarter & faster.</span></h1>
+            <p>
+                A modern platform to manage employees, attendance,
+                payroll, leaves and performance from one place.
+            </p>
+
+            <div class="auth-features">
+                <div>✓ Easy employee management</div>
+                <div>✓ Real-time attendance tracking</div>
+                <div>✓ Secure payroll management</div>
             </div>
         </div>
 
-        <div class="auth-copy">
-            <p class="eyebrow">SECURE WORKSPACE</p>
-            <h1 id="authTitle">Welcome back</h1>
-            <p id="authSubtitle">Sign in to manage your employee workspace.</p>
+        <div class="auth-footer">
+            © 2026 EmployeeHub
+        </div>
+    </div>
+
+
+    <div class="auth-right">
+
+        <!-- LOGIN -->
+
+        <div class="auth-card" id="loginCard">
+
+            <div class="mobile-logo">EMS</div>
+
+            <h2>Welcome back 👋</h2>
+            <p>Sign in to access your dashboard</p>
+
+            <div class="role-selector">
+
+                <button class="role active"
+                        onclick="selectRole('Admin',this)">
+                    Admin
+                </button>
+
+                <button class="role"
+                        onclick="selectRole('HR Manager',this)">
+                    HR Manager
+                </button>
+
+                <button class="role"
+                        onclick="selectRole('Employee',this)">
+                    Employee
+                </button>
+
+            </div>
+
+            <input type="hidden" id="loginRole" value="Admin">
+
+            <label>Email</label>
+            <div class="input-box">
+                <span>✉</span>
+                <input id="loginEmail"
+                       type="email"
+                       placeholder="you@example.com">
+            </div>
+
+            <label>Password</label>
+            <div class="input-box">
+                <span>🔒</span>
+                <input id="loginPassword"
+                       type="password"
+                       placeholder="Enter password">
+            </div>
+
+            <div class="form-options">
+                <label class="remember">
+                    <input type="checkbox">
+                    Remember me
+                </label>
+
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <button class="main-auth-btn" onclick="login()">
+                Sign In <span>→</span>
+            </button>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <p class="create-text">
+                Don't have an account?
+                <b onclick="showSignup()">Create Account</b>
+            </p>
+
+            <div class="demo-box">
+                <strong>Demo Login</strong>
+                <small>Admin: admin@ems.com / admin123</small>
+                <small>HR: hr@ems.com / hr123</small>
+                <small>Employee: employee@ems.com / emp123</small>
+            </div>
+
         </div>
 
-        <form id="signInForm" class="auth-form">
-            <label for="signInEmail">Work email</label>
-            <input id="signInEmail" type="email" placeholder="admin@ems.local" required>
-            <label for="signInPassword">Password</label>
-            <input id="signInPassword" type="password" placeholder="Enter your password" required>
-            <button class="auth-submit" type="submit">Sign in <i class="fa-solid fa-arrow-right"></i></button>
-            <p class="auth-hint">Demo: admin@ems.local / admin123 or hr@ems.local / hr123</p>
-        </form>
 
-        <form id="signUpForm" class="auth-form hidden">
-            <label for="signUpName">Full name</label>
-            <input id="signUpName" type="text" placeholder="Your full name" required>
-            <label for="signUpEmail">Work email</label>
-            <input id="signUpEmail" type="email" placeholder="you@company.com" required>
-            <label for="signUpPassword">Password</label>
-            <input id="signUpPassword" type="password" minlength="6" placeholder="At least 6 characters" required>
-            <button class="auth-submit" type="submit">Create employee account <i class="fa-solid fa-user-plus"></i></button>
-            <p class="auth-hint">New accounts receive Employee access. An Admin can assign elevated roles.</p>
-        </form>
+        <!-- SIGN UP -->
 
-        <p class="auth-message" id="authMessage" role="alert"></p>
-        <button class="auth-switch" id="authSwitch" type="button">Need an account? Sign up</button>
+        <div class="auth-card signup-card" id="signupCard">
+
+            <div class="mobile-logo">EMS</div>
+
+            <h2>Create your account ✨</h2>
+            <p>Get started with EmployeeHub</p>
+
+            <label>Full Name</label>
+            <div class="input-box">
+                <span>👤</span>
+                <input id="signupName"
+                       type="text"
+                       placeholder="Your full name">
+            </div>
+
+            <label>Email</label>
+            <div class="input-box">
+                <span>✉</span>
+                <input id="signupEmail"
+                       type="email"
+                       placeholder="you@example.com">
+            </div>
+
+            <label>Phone</label>
+            <div class="input-box">
+                <span>☎</span>
+                <input id="signupPhone"
+                       type="text"
+                       placeholder="Phone number">
+            </div>
+
+            <label>Role</label>
+
+            <select id="signupRole">
+                <option value="Employee">Employee</option>
+                <option value="HR Manager">HR Manager</option>
+                <option value="Admin">Admin</option>
+            </select>
+
+            <label>Password</label>
+
+            <div class="input-box">
+                <span>🔒</span>
+                <input id="signupPassword"
+                       type="password"
+                       placeholder="Create password">
+            </div>
+
+            <label>Confirm Password</label>
+
+            <div class="input-box">
+                <span>🔒</span>
+                <input id="signupConfirm"
+                       type="password"
+                       placeholder="Confirm password">
+            </div>
+
+            <button class="main-auth-btn" onclick="createAccount()">
+                Create Account <span>→</span>
+            </button>
+
+            <p class="create-text">
+                Already have an account?
+                <b onclick="showLogin()">Sign In</b>
+            </p>
+
+        </div>
+
     </div>
-</section>
+</div>
 
-<div class="container">
+
+<!-- ================= APPLICATION ================= -->
+
+<div class="application" id="application">
 
     <!-- SIDEBAR -->
+
     <aside class="sidebar">
 
-        <div class="logo">
-            <i class="fa-solid fa-users"></i>
-            <span>EMS</span>
+        <div class="sidebar-brand">
+            <div class="brand-logo">EMS</div>
+            <div>
+                <strong>EmployeeHub</strong>
+                <small>Management System</small>
+            </div>
         </div>
 
-        <p class="menu-title">MAIN MENU</p>
+        <div class="menu-title">MAIN MENU</div>
 
-        <a href="#" class="menu active" onclick="showPage('dashboard')">
-            <i class="fa-solid fa-chart-pie"></i>
-            Dashboard
-        </a>
+        <nav>
 
-        <a href="#" class="menu" onclick="showPage('employees')">
-            <i class="fa-solid fa-user-group"></i>
-            Employees
-        </a>
+            <button class="nav-link active"
+                    onclick="showPage('dashboard',this)">
+                <span>⌂</span>
+                Dashboard
+            </button>
 
-        <a href="#" class="menu" onclick="showPage('attendance')">
-            <i class="fa-solid fa-calendar-check"></i>
-            Attendance
-        </a>
+            <button class="nav-link"
+                    onclick="showPage('employees',this)">
+                <span>♙</span>
+                Employees
+            </button>
 
-        <a href="#" class="menu" onclick="showPage('leave')">
-            <i class="fa-solid fa-plane-departure"></i>
-            Leave
-        </a>
+            <button class="nav-link"
+                    onclick="showPage('attendance',this)">
+                <span>◷</span>
+                Attendance
+            </button>
 
-        <a href="#" class="menu" onclick="showPage('payroll')">
-            <i class="fa-solid fa-wallet"></i>
-            Payroll
-        </a>
+            <button class="nav-link"
+                    onclick="showPage('leave',this)">
+                <span>▣</span>
+                Leave
+                <em>8</em>
+            </button>
 
-        <a href="#" class="menu" onclick="showPage('performance')">
-            <i class="fa-solid fa-star"></i>
-            Performance
-        </a>
+            <button class="nav-link"
+                    onclick="showPage('payroll',this)">
+                <span>₹</span>
+                Payroll
+            </button>
 
-        <p class="menu-title">OTHERS</p>
+            <button class="nav-link"
+                    onclick="showPage('performance',this)">
+                <span>★</span>
+                Performance
+            </button>
 
-        <a href="#" class="menu">
-            <i class="fa-solid fa-bell"></i>
-            Notifications
-            <span class="notification">4</span>
-        </a>
+        </nav>
 
-        <a href="#" class="menu">
-            <i class="fa-solid fa-gear"></i>
-            Settings
-        </a>
+        <div class="menu-title">SYSTEM</div>
+
+        <nav>
+
+            <button class="nav-link">
+                <span>⚙</span>
+                Settings
+            </button>
+
+            <button class="nav-link">
+                <span>?</span>
+                Help Center
+            </button>
+
+        </nav>
 
         <div class="sidebar-bottom">
-            <div class="profile-small">
-                <div class="avatar" id="sidebarAvatar">AD</div>
-                <div>
-                    <b id="sidebarName">Admin</b>
-                    <small id="sidebarRole">Administrator</small>
+
+            <div class="profile-mini">
+
+                <div class="profile-avatar"
+                     id="sideAvatar">
+                    A
                 </div>
+
+                <div>
+                    <strong id="sideName">Admin</strong>
+                    <small id="sideRole">Administrator</small>
+                </div>
+
+                <span>•••</span>
+
             </div>
 
-            <button class="logout" id="logoutButton">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
+            <button class="logout" onclick="logout()">
+                ⇥ Logout
             </button>
+
         </div>
 
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
+
     <main class="main">
 
         <!-- TOPBAR -->
+
         <header class="topbar">
 
+            <div class="mobile-menu">☰</div>
+
             <div>
-                <h2 id="pageTitle">Dashboard</h2>
-                <p id="topbarWelcome">Welcome back, Admin</p>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSub">
+                    Here's what's happening with your workforce today.
+                </p>
             </div>
 
             <div class="top-actions">
 
-                <div class="search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search..." id="globalSearch">
+                <div class="search-global">
+                    🔍
+                    <input placeholder="Search anything...">
+                    <kbd>⌘ K</kbd>
                 </div>
 
-                <button class="icon-btn" onclick="toggleDarkMode()">
-                    <i class="fa-solid fa-moon"></i>
+                <button class="icon-btn">
+                    🔔
+                    <i></i>
                 </button>
 
-                <button class="icon-btn notification-btn">
-                    <i class="fa-solid fa-bell"></i>
-                    <span>3</span>
-                </button>
-
-                <div class="admin-profile">
-                    <div class="avatar" id="profileAvatar">AD</div>
+                <div class="top-profile">
+                    <div class="top-avatar" id="topAvatar">A</div>
                     <div>
-                        <b id="profileName">Admin</b>
-                        <small id="profileRole">Administrator</small>
+                        <strong id="topName">Admin</strong>
+                        <small id="topRole">Administrator</small>
                     </div>
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <span>⌄</span>
                 </div>
 
             </div>
@@ -166,99 +339,153 @@
         </header>
 
 
-        <!-- DASHBOARD -->
-        <section id="dashboard" class="page active-page">
+        <!-- ================= DASHBOARD ================= -->
 
-            <div class="welcome-card">
+        <section class="page active" id="dashboard">
+
+            <div class="hero">
+
                 <div>
-                    <h1 id="welcomeHeading">Good Morning, Admin!</h1>
-                    <p>Here's what's happening in your organization today.</p>
+                    <span>GOOD MORNING 👋</span>
+                    <h2>Welcome back, <strong id="welcomeName">Admin</strong></h2>
+                    <p>
+                        Here's a quick overview of your organization today.
+                    </p>
                 </div>
 
-                <div class="welcome-icon">
-                    <i class="fa-solid fa-building"></i>
+                <div class="hero-date">
+                    <span>Today</span>
+                    <strong id="currentDate"></strong>
                 </div>
+
             </div>
 
 
-            <!-- STATISTICS -->
+            <!-- STATS -->
+
             <div class="stats">
 
                 <div class="stat-card">
-                    <div class="stat-icon blue">
-                        <i class="fa-solid fa-users"></i>
+
+                    <div class="stat-top">
+                        <div class="stat-icon purple">♙</div>
+                        <span class="trend up">+12.5%</span>
                     </div>
-                    <div>
-                        <p>Total Employees</p>
-                        <h2>248</h2>
-                        <span class="green">↑ 12% this month</span>
-                    </div>
+
+                    <p>Total Employees</p>
+                    <h2>125</h2>
+                    <small>Compared to last month</small>
+
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon green-bg">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-                    <div>
-                        <p>Present Today</p>
-                        <h2>221</h2>
-                        <span class="green">89.1% attendance</span>
-                    </div>
-                </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon orange">
-                        <i class="fa-solid fa-calendar-xmark"></i>
+
+                    <div class="stat-top">
+                        <div class="stat-icon green">✓</div>
+                        <span class="trend up">+4.2%</span>
                     </div>
-                    <div>
-                        <p>On Leave</p>
-                        <h2>18</h2>
-                        <span class="orange-text">7.2% employees</span>
-                    </div>
+
+                    <p>Present Today</p>
+                    <h2>112</h2>
+                    <small>89.6% attendance rate</small>
+
                 </div>
 
+
                 <div class="stat-card">
-                    <div class="stat-icon purple">
-                        <i class="fa-solid fa-user-plus"></i>
+
+                    <div class="stat-top">
+                        <div class="stat-icon orange">▣</div>
+                        <span class="trend neutral">8 Pending</span>
                     </div>
-                    <div>
-                        <p>New Employees</p>
-                        <h2>09</h2>
-                        <span class="green">This month</span>
+
+                    <p>Leave Requests</p>
+                    <h2>18</h2>
+                    <small>10 approved this month</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon blue">₹</div>
+                        <span class="trend up">+5.8%</span>
                     </div>
+
+                    <p>Monthly Payroll</p>
+                    <h2>₹8.4L</h2>
+                    <small>Compared to last month</small>
+
                 </div>
 
             </div>
 
 
-            <!-- DASHBOARD GRID -->
-            <div class="dashboard-grid">
+            <!-- CHART + ACTIVITY -->
 
-                <div class="card attendance-card">
+            <div class="content-grid">
 
-                    <div class="card-header">
+                <div class="panel large-panel">
+
+                    <div class="panel-head">
+
                         <div>
                             <h3>Attendance Overview</h3>
-                            <p>Monthly attendance statistics</p>
+                            <p>Daily attendance for this week</p>
                         </div>
 
                         <select>
-                            <option>September 2026</option>
-                            <option>August 2026</option>
-                            <option>July 2026</option>
+                            <option>This Week</option>
+                            <option>This Month</option>
+                            <option>This Year</option>
                         </select>
+
                     </div>
 
-                    <div class="attendance-chart">
+                    <div class="chart">
 
-                        <div class="chart-bars">
-                            <div class="bar" style="height:55%"><span>Mon</span></div>
-                            <div class="bar" style="height:75%"><span>Tue</span></div>
-                            <div class="bar" style="height:65%"><span>Wed</span></div>
-                            <div class="bar" style="height:88%"><span>Thu</span></div>
-                            <div class="bar" style="height:78%"><span>Fri</span></div>
-                            <div class="bar" style="height:45%"><span>Sat</span></div>
-                            <div class="bar" style="height:20%"><span>Sun</span></div>
+                        <div class="chart-labels">
+                            <span>100%</span>
+                            <span>75%</span>
+                            <span>50%</span>
+                            <span>25%</span>
+                            <span>0%</span>
+                        </div>
+
+                        <div class="bars">
+
+                            <div class="bar-column">
+                                <div class="bar" style="height:78%"></div>
+                                <span>Mon</span>
+                            </div>
+
+                            <div class="bar-column">
+                                <div class="bar" style="height:88%"></div>
+                                <span>Tue</span>
+                            </div>
+
+                            <div class="bar-column">
+                                <div class="bar" style="height:72%"></div>
+                                <span>Wed</span>
+                            </div>
+
+                            <div class="bar-column">
+                                <div class="bar" style="height:94%"></div>
+                                <span>Thu</span>
+                            </div>
+
+                            <div class="bar-column">
+                                <div class="bar" style="height:84%"></div>
+                                <span>Fri</span>
+                            </div>
+
+                            <div class="bar-column">
+                                <div class="bar" style="height:63%"></div>
+                                <span>Sat</span>
+                            </div>
+
                         </div>
 
                     </div>
@@ -266,52 +493,37 @@
                 </div>
 
 
-                <!-- UPCOMING -->
-                <div class="card">
+                <div class="panel">
 
-                    <div class="card-header">
+                    <div class="panel-head">
                         <div>
-                            <h3>Upcoming Events</h3>
-                            <p>Important employee events</p>
-                        </div>
-
-                        <button class="view-btn">View All</button>
-                    </div>
-
-                    <div class="event">
-                        <div class="event-date">
-                            <b>22</b>
-                            <small>SEP</small>
-                        </div>
-
-                        <div>
-                            <b>Employee Birthday 🎂</b>
-                            <p>Rahul Sharma</p>
+                            <h3>Quick Actions</h3>
+                            <p>Common tasks</p>
                         </div>
                     </div>
 
-                    <div class="event">
-                        <div class="event-date">
-                            <b>25</b>
-                            <small>SEP</small>
-                        </div>
+                    <div class="quick-grid">
 
-                        <div>
-                            <b>Work Anniversary</b>
-                            <p>Priya Reddy - 3 Years</p>
-                        </div>
-                    </div>
+                        <button onclick="openEmployeeModal()">
+                            <span>＋</span>
+                            Add Employee
+                        </button>
 
-                    <div class="event">
-                        <div class="event-date">
-                            <b>28</b>
-                            <small>SEP</small>
-                        </div>
+                        <button onclick="showPage('attendance')">
+                            <span>✓</span>
+                            Mark Attendance
+                        </button>
 
-                        <div>
-                            <b>Team Meeting</b>
-                            <p>Conference Room A</p>
-                        </div>
+                        <button onclick="showPage('leave')">
+                            <span>▣</span>
+                            Review Leaves
+                        </button>
+
+                        <button onclick="showPage('payroll')">
+                            <span>₹</span>
+                            View Payroll
+                        </button>
+
                     </div>
 
                 </div>
@@ -319,103 +531,108 @@
             </div>
 
 
-            <!-- RECENT EMPLOYEES -->
-            <div class="card">
+            <!-- RECENT + DEPARTMENTS -->
 
-                <div class="card-header">
+            <div class="content-grid bottom-grid">
 
-                    <div>
-                        <h3>Recent Employees</h3>
-                        <p>Recently added employees</p>
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+                            <h3>Recent Employees</h3>
+                            <p>Recently added employees</p>
+                        </div>
+
+                        <button class="view-btn"
+                                onclick="showPage('employees')">
+                            View All →
+                        </button>
+
                     </div>
 
-                    <button class="primary-btn" onclick="showPage('employees')">
-                        View All
-                    </button>
+                    <div class="recent-list">
+
+                        <div class="recent-item">
+                            <div class="person-avatar">RK</div>
+                            <div>
+                                <strong>Rahul Kumar</strong>
+                                <small>Software Developer · IT</small>
+                            </div>
+                            <span class="active-dot">Active</span>
+                        </div>
+
+                        <div class="recent-item">
+                            <div class="person-avatar pink">SR</div>
+                            <div>
+                                <strong>Sneha Reddy</strong>
+                                <small>HR Executive · HR</small>
+                            </div>
+                            <span class="active-dot">Active</span>
+                        </div>
+
+                        <div class="recent-item">
+                            <div class="person-avatar orange">AS</div>
+                            <div>
+                                <strong>Arjun Singh</strong>
+                                <small>Accountant · Finance</small>
+                            </div>
+                            <span class="leave-dot">Leave</span>
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="table-container">
 
-                    <table>
+                <div class="panel">
 
-                        <thead>
-                            <tr>
-                                <th>Employee</th>
-                                <th>Department</th>
-                                <th>Position</th>
-                                <th>Joining Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
+                    <div class="panel-head">
+                        <div>
+                            <h3>Department Overview</h3>
+                            <p>Employees by department</p>
+                        </div>
+                    </div>
 
-                        <tbody>
+                    <div class="department">
 
-                            <tr>
-                                <td>
-                                    <div class="employee">
-                                        <div class="employee-avatar">RS</div>
-                                        <div>
-                                            <b>Rahul Sharma</b>
-                                            <small>EMP001</small>
-                                        </div>
-                                    </div>
-                                </td>
+                        <div>
+                            <span>IT Department</span>
+                            <strong>48</strong>
+                        </div>
 
-                                <td>Engineering</td>
-                                <td>Software Developer</td>
-                                <td>12 Sep 2026</td>
+                        <div class="dept-progress">
+                            <i style="width:82%"></i>
+                        </div>
 
-                                <td>
-                                    <span class="status active">Active</span>
-                                </td>
-                            </tr>
+                        <div>
+                            <span>HR Department</span>
+                            <strong>24</strong>
+                        </div>
 
+                        <div class="dept-progress">
+                            <i style="width:52%"></i>
+                        </div>
 
-                            <tr>
-                                <td>
-                                    <div class="employee">
-                                        <div class="employee-avatar pink">PR</div>
-                                        <div>
-                                            <b>Priya Reddy</b>
-                                            <small>EMP002</small>
-                                        </div>
-                                    </div>
-                                </td>
+                        <div>
+                            <span>Finance</span>
+                            <strong>21</strong>
+                        </div>
 
-                                <td>Marketing</td>
-                                <td>Marketing Executive</td>
-                                <td>10 Sep 2026</td>
+                        <div class="dept-progress">
+                            <i style="width:45%"></i>
+                        </div>
 
-                                <td>
-                                    <span class="status active">Active</span>
-                                </td>
-                            </tr>
+                        <div>
+                            <span>Marketing</span>
+                            <strong>32</strong>
+                        </div>
 
+                        <div class="dept-progress">
+                            <i style="width:68%"></i>
+                        </div>
 
-                            <tr>
-                                <td>
-                                    <div class="employee">
-                                        <div class="employee-avatar purple-bg">AK</div>
-                                        <div>
-                                            <b>Arjun Kumar</b>
-                                            <small>EMP003</small>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>Finance</td>
-                                <td>Accountant</td>
-                                <td>08 Sep 2026</td>
-
-                                <td>
-                                    <span class="status leave">On Leave</span>
-                                </td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
+                    </div>
 
                 </div>
 
@@ -424,164 +641,135 @@
         </section>
 
 
-        <!-- EMPLOYEES -->
-        <section id="employees" class="page">
+        <!-- ================= EMPLOYEES ================= -->
+
+        <section class="page" id="employees">
 
             <div class="section-heading">
+
                 <div>
-                    <h1>Employees</h1>
-                    <p>Manage all your employees</p>
+                    <span class="section-label">WORKFORCE</span>
+                    <h2>Employee Management</h2>
+                    <p>Manage your organization's employees.</p>
                 </div>
 
-                <button class="primary-btn manage-employees" onclick="openModal()">
-                    <i class="fa-solid fa-plus"></i>
-                    Add Employee
+                <button class="primary-btn"
+                        onclick="openEmployeeModal()">
+                    + Add Employee
                 </button>
-            </div>
-
-            <div class="employee-stats">
-
-                <div class="mini-card">
-                    <i class="fa-solid fa-users"></i>
-                    <div>
-                        <span>Total</span>
-                        <b>248</b>
-                    </div>
-                </div>
-
-                <div class="mini-card">
-                    <i class="fa-solid fa-user-check"></i>
-                    <div>
-                        <span>Active</span>
-                        <b>221</b>
-                    </div>
-                </div>
-
-                <div class="mini-card">
-                    <i class="fa-solid fa-user-clock"></i>
-                    <div>
-                        <span>On Leave</span>
-                        <b>18</b>
-                    </div>
-                </div>
 
             </div>
 
+            <div class="panel">
 
-            <div class="card">
+                <div class="table-tools">
 
-                <div class="filter-row">
-
-                    <div class="search employee-search">
-                        <i class="fa-solid fa-search"></i>
-                        <input type="text" placeholder="Search employees..." id="employeeSearch">
+                    <div class="table-search">
+                        🔍
+                        <input
+                            id="employeeSearch"
+                            onkeyup="searchEmployees()"
+                            placeholder="Search employees..."
+                        >
                     </div>
 
-                    <select>
-                        <option>All Departments</option>
-                        <option>Engineering</option>
-                        <option>Marketing</option>
-                        <option>Finance</option>
-                        <option>HR</option>
-                    </select>
-
-                    <select>
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>On Leave</option>
-                    </select>
+                    <div class="filters">
+                        <button>All Departments ▾</button>
+                        <button>All Status ▾</button>
+                    </div>
 
                 </div>
 
-
-                <div class="table-container">
+                <div class="table-wrap">
 
                     <table id="employeeTable">
 
                         <thead>
                             <tr>
-                                <th>Employee</th>
-                                <th>Department</th>
-                                <th>Position</th>
-                                <th>Salary</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>EMPLOYEE</th>
+                                <th>DEPARTMENT</th>
+                                <th>POSITION</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
                             </tr>
                         </thead>
 
-                        <tbody id="employeeTableBody">
+                        <tbody>
 
                             <tr>
                                 <td>
-                                    <div class="employee">
-                                        <div class="employee-avatar">RS</div>
+                                    <div class="employee-cell">
+                                        <div class="person-avatar">RK</div>
                                         <div>
-                                            <b>Rahul Sharma</b>
-                                            <small>EMP001</small>
+                                            <strong>Rahul Kumar</strong>
+                                            <small>rahul@company.com</small>
                                         </div>
                                     </div>
                                 </td>
 
-                                <td>Engineering</td>
+                                <td>IT</td>
                                 <td>Software Developer</td>
-                                <td>₹55,000</td>
 
                                 <td>
-                                    <span class="status active">Active</span>
+                                    <span class="status active">
+                                        Active
+                                    </span>
                                 </td>
 
-                                <td class="employee-actions">
-                                    <button class="action-btn remove-employee" type="button">Remove</button>
+                                <td>
+                                    <button class="edit-btn">Edit</button>
                                 </td>
                             </tr>
 
 
                             <tr>
                                 <td>
-                                    <div class="employee">
-                                        <div class="employee-avatar pink">PR</div>
+                                    <div class="employee-cell">
+                                        <div class="person-avatar pink">SR</div>
                                         <div>
-                                            <b>Priya Reddy</b>
-                                            <small>EMP002</small>
+                                            <strong>Sneha Reddy</strong>
+                                            <small>sneha@company.com</small>
                                         </div>
                                     </div>
                                 </td>
 
-                                <td>Marketing</td>
-                                <td>Marketing Executive</td>
-                                <td>₹45,000</td>
+                                <td>HR</td>
+                                <td>HR Executive</td>
 
                                 <td>
-                                    <span class="status active">Active</span>
+                                    <span class="status active">
+                                        Active
+                                    </span>
                                 </td>
 
-                                <td class="employee-actions">
-                                    <button class="action-btn remove-employee" type="button">Remove</button>
+                                <td>
+                                    <button class="edit-btn">Edit</button>
                                 </td>
                             </tr>
 
 
                             <tr>
                                 <td>
-                                    <div class="employee">
-                                        <div class="employee-avatar purple-bg">AK</div>
+                                    <div class="employee-cell">
+                                        <div class="person-avatar orange">AS</div>
                                         <div>
-                                            <b>Arjun Kumar</b>
-                                            <small>EMP003</small>
+                                            <strong>Arjun Singh</strong>
+                                            <small>arjun@company.com</small>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td>Finance</td>
                                 <td>Accountant</td>
-                                <td>₹48,000</td>
 
                                 <td>
-                                    <span class="status leave">On Leave</span>
+                                    <span class="status leave">
+                                        On Leave
+                                    </span>
                                 </td>
 
-                                <td class="employee-actions">
-                                    <button class="action-btn remove-employee" type="button">Remove</button>
+                                <td>
+                                    <button class="edit-btn">Edit</button>
                                 </td>
                             </tr>
 
@@ -596,105 +784,92 @@
         </section>
 
 
-        <!-- ATTENDANCE -->
-        <section id="attendance" class="page">
+        <!-- ================= ATTENDANCE ================= -->
+
+        <section class="page" id="attendance">
 
             <div class="section-heading">
+
                 <div>
-                    <h1>Attendance</h1>
-                    <p>Track employee attendance</p>
+                    <span class="section-label">TIME TRACKING</span>
+                    <h2>Attendance</h2>
+                    <p>Monitor daily employee attendance.</p>
                 </div>
 
                 <button class="primary-btn">
-                    <i class="fa-solid fa-download"></i>
-                    Export Report
+                    + Mark Attendance
                 </button>
+
             </div>
 
-            <div class="stats">
+            <div class="stats mini-stats">
 
                 <div class="stat-card">
-                    <div class="stat-icon green-bg">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-
-                    <div>
-                        <p>Present</p>
-                        <h2>221</h2>
-                    </div>
+                    <p>Present</p>
+                    <h2>112</h2>
+                    <small class="green-text">89.6%</small>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon red-bg">
-                        <i class="fa-solid fa-user-xmark"></i>
-                    </div>
-
-                    <div>
-                        <p>Absent</p>
-                        <h2>9</h2>
-                    </div>
+                    <p>Absent</p>
+                    <h2>7</h2>
+                    <small class="red-text">5.6%</small>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon orange">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
+                    <p>Late</p>
+                    <h2>6</h2>
+                    <small class="orange-text">4.8%</small>
+                </div>
 
-                    <div>
-                        <p>Late</p>
-                        <h2>18</h2>
-                    </div>
+                <div class="stat-card">
+                    <p>On Leave</p>
+                    <h2>8</h2>
+                    <small>Today</small>
                 </div>
 
             </div>
 
-            <div class="card">
+            <div class="panel">
 
-                <div class="card-header">
-                    <div>
-                        <h3>Today's Attendance</h3>
-                        <p>19 September 2026</p>
-                    </div>
-                </div>
-
-                <div class="table-container">
+                <div class="table-wrap">
 
                     <table>
 
                         <thead>
                             <tr>
-                                <th>Employee</th>
-                                <th>Check In</th>
-                                <th>Check Out</th>
-                                <th>Working Hours</th>
-                                <th>Status</th>
+                                <th>EMPLOYEE</th>
+                                <th>DATE</th>
+                                <th>CHECK IN</th>
+                                <th>CHECK OUT</th>
+                                <th>STATUS</th>
                             </tr>
                         </thead>
 
                         <tbody>
 
                             <tr>
-                                <td>Rahul Sharma</td>
+                                <td>Rahul Kumar</td>
+                                <td>23 Sep 2026</td>
                                 <td>09:02 AM</td>
                                 <td>06:05 PM</td>
-                                <td>8h 55m</td>
                                 <td><span class="status active">Present</span></td>
                             </tr>
 
                             <tr>
-                                <td>Priya Reddy</td>
-                                <td>09:18 AM</td>
+                                <td>Sneha Reddy</td>
+                                <td>23 Sep 2026</td>
+                                <td>09:15 AM</td>
                                 <td>06:00 PM</td>
-                                <td>8h 42m</td>
-                                <td><span class="status late">Late</span></td>
+                                <td><span class="status active">Present</span></td>
                             </tr>
 
                             <tr>
-                                <td>Arjun Kumar</td>
+                                <td>Arjun Singh</td>
+                                <td>23 Sep 2026</td>
                                 <td>—</td>
                                 <td>—</td>
-                                <td>—</td>
-                                <td><span class="status leave">Leave</span></td>
+                                <td><span class="status leave">On Leave</span></td>
                             </tr>
 
                         </tbody>
@@ -708,84 +883,70 @@
         </section>
 
 
-        <!-- LEAVE -->
-        <section id="leave" class="page">
+        <!-- ================= LEAVE ================= -->
+
+        <section class="page" id="leave">
 
             <div class="section-heading">
 
                 <div>
-                    <h1>Leave Management</h1>
-                    <p>Manage employee leave requests</p>
+                    <span class="section-label">TIME OFF</span>
+                    <h2>Leave Management</h2>
+                    <p>Review and manage employee leave requests.</p>
                 </div>
 
                 <button class="primary-btn">
-                    <i class="fa-solid fa-plus"></i>
-                    Apply Leave
+                    + Apply Leave
                 </button>
 
             </div>
 
-            <div class="leave-cards">
+            <div class="panel">
 
-                <div class="leave-card">
-                    <span>Pending Requests</span>
-                    <b>08</b>
-                    <i class="fa-solid fa-hourglass-half"></i>
-                </div>
-
-                <div class="leave-card">
-                    <span>Approved</span>
-                    <b>32</b>
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-
-                <div class="leave-card">
-                    <span>Rejected</span>
-                    <b>05</b>
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <div class="card-header">
-                    <h3>Leave Requests</h3>
-                </div>
-
-                <div class="table-container">
+                <div class="table-wrap">
 
                     <table>
 
                         <thead>
                             <tr>
-                                <th>Employee</th>
-                                <th>Leave Type</th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>Days</th>
-                                <th>Status</th>
+                                <th>EMPLOYEE</th>
+                                <th>LEAVE TYPE</th>
+                                <th>FROM</th>
+                                <th>TO</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
                             </tr>
                         </thead>
 
                         <tbody>
 
                             <tr>
-                                <td>Rahul Sharma</td>
+                                <td>Arjun Singh</td>
                                 <td>Casual Leave</td>
-                                <td>20 Sep</td>
-                                <td>21 Sep</td>
-                                <td>2</td>
-                                <td><span class="status pending">Pending</span></td>
+                                <td>24 Sep</td>
+                                <td>25 Sep</td>
+                                <td>
+                                    <span class="status pending">
+                                        Pending
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="approve">Approve</button>
+                                    <button class="reject">Reject</button>
+                                </td>
                             </tr>
 
                             <tr>
-                                <td>Priya Reddy</td>
+                                <td>Priya Sharma</td>
                                 <td>Sick Leave</td>
-                                <td>18 Sep</td>
-                                <td>19 Sep</td>
-                                <td>2</td>
-                                <td><span class="status active">Approved</span></td>
+                                <td>22 Sep</td>
+                                <td>23 Sep</td>
+                                <td>
+                                    <span class="status active">
+                                        Approved
+                                    </span>
+                                </td>
+                                <td>—</td>
                             </tr>
 
                         </tbody>
@@ -799,18 +960,19 @@
         </section>
 
 
-        <!-- PAYROLL -->
-        <section id="payroll" class="page">
+        <!-- ================= PAYROLL ================= -->
+
+        <section class="page" id="payroll">
 
             <div class="section-heading">
 
                 <div>
-                    <h1>Payroll</h1>
-                    <p>Employee salary and payment management</p>
+                    <span class="section-label">FINANCE</span>
+                    <h2>Payroll</h2>
+                    <p>Manage salary and payroll information.</p>
                 </div>
 
                 <button class="primary-btn">
-                    <i class="fa-solid fa-file-invoice"></i>
                     Generate Payroll
                 </button>
 
@@ -819,72 +981,63 @@
             <div class="stats">
 
                 <div class="stat-card">
-                    <div class="stat-icon blue">
-                        <i class="fa-solid fa-indian-rupee-sign"></i>
-                    </div>
-
-                    <div>
-                        <p>Total Payroll</p>
-                        <h2>₹1.24 Cr</h2>
-                    </div>
+                    <p>Gross Salary</p>
+                    <h2>₹9.5L</h2>
+                    <small>Before deductions</small>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon green-bg">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
+                    <p>Total Deductions</p>
+                    <h2>₹1.1L</h2>
+                    <small>Tax & benefits</small>
+                </div>
 
-                    <div>
-                        <p>Paid</p>
-                        <h2>₹98 L</h2>
-                    </div>
+                <div class="stat-card">
+                    <p>Net Salary</p>
+                    <h2>₹8.4L</h2>
+                    <small class="green-text">Ready for payment</small>
+                </div>
+
+                <div class="stat-card">
+                    <p>Employees Paid</p>
+                    <h2>117</h2>
+                    <small>Out of 125</small>
                 </div>
 
             </div>
 
-            <div class="card">
+            <div class="panel">
 
-                <div class="card-header">
-                    <h3>Salary Details</h3>
-                    <select>
-                        <option>September 2026</option>
-                        <option>August 2026</option>
-                    </select>
-                </div>
-
-                <div class="table-container">
+                <div class="table-wrap">
 
                     <table>
 
                         <thead>
                             <tr>
-                                <th>Employee</th>
-                                <th>Basic Salary</th>
-                                <th>Allowances</th>
-                                <th>Deductions</th>
-                                <th>Net Salary</th>
-                                <th>Status</th>
+                                <th>EMPLOYEE</th>
+                                <th>BASIC SALARY</th>
+                                <th>ALLOWANCES</th>
+                                <th>DEDUCTIONS</th>
+                                <th>NET SALARY</th>
                             </tr>
                         </thead>
 
                         <tbody>
 
                             <tr>
-                                <td>Rahul Sharma</td>
-                                <td>₹45,000</td>
-                                <td>₹10,000</td>
-                                <td>₹2,000</td>
-                                <td><b>₹53,000</b></td>
-                                <td><span class="status active">Paid</span></td>
+                                <td>Rahul Kumar</td>
+                                <td>₹55,000</td>
+                                <td>₹8,000</td>
+                                <td>₹5,000</td>
+                                <td><strong>₹58,000</strong></td>
                             </tr>
 
                             <tr>
-                                <td>Priya Reddy</td>
-                                <td>₹38,000</td>
-                                <td>₹8,000</td>
-                                <td>₹1,500</td>
-                                <td><b>₹44,500</b></td>
-                                <td><span class="status pending">Pending</span></td>
+                                <td>Sneha Reddy</td>
+                                <td>₹48,000</td>
+                                <td>₹7,000</td>
+                                <td>₹4,000</td>
+                                <td><strong>₹51,000</strong></td>
                             </tr>
 
                         </tbody>
@@ -898,19 +1051,20 @@
         </section>
 
 
-        <!-- PERFORMANCE -->
-        <section id="performance" class="page">
+        <!-- ================= PERFORMANCE ================= -->
+
+        <section class="page" id="performance">
 
             <div class="section-heading">
 
                 <div>
-                    <h1>Employee Performance</h1>
-                    <p>Track employee performance and achievements</p>
+                    <span class="section-label">ANALYTICS</span>
+                    <h2>Performance</h2>
+                    <p>Track employee performance and productivity.</p>
                 </div>
 
                 <button class="primary-btn">
-                    <i class="fa-solid fa-chart-line"></i>
-                    Performance Report
+                    + Add Review
                 </button>
 
             </div>
@@ -919,50 +1073,72 @@
 
                 <div class="performance-card">
 
-                    <div class="performance-top">
-                        <div class="employee-avatar">RS</div>
-
+                    <div class="employee-cell">
+                        <div class="person-avatar">RK</div>
                         <div>
-                            <h3>Rahul Sharma</h3>
-                            <p>Software Developer</p>
+                            <strong>Rahul Kumar</strong>
+                            <small>Software Developer</small>
                         </div>
                     </div>
 
-                    <div class="rating">
-                        ⭐⭐⭐⭐⭐
-                        <b>4.8 / 5</b>
+                    <div class="score">
+                        <strong>92%</strong>
+                        <span>Excellent</span>
                     </div>
 
                     <div class="progress">
-                        <div style="width:92%"></div>
+                        <i style="width:92%"></i>
                     </div>
 
-                    <small>Overall Performance: 92%</small>
+                    <p>Last reviewed: September 2026</p>
 
                 </div>
 
 
                 <div class="performance-card">
 
-                    <div class="performance-top">
-                        <div class="employee-avatar pink">PR</div>
-
+                    <div class="employee-cell">
+                        <div class="person-avatar pink">SR</div>
                         <div>
-                            <h3>Priya Reddy</h3>
-                            <p>Marketing Executive</p>
+                            <strong>Sneha Reddy</strong>
+                            <small>HR Executive</small>
                         </div>
                     </div>
 
-                    <div class="rating">
-                        ⭐⭐⭐⭐☆
-                        <b>4.2 / 5</b>
+                    <div class="score">
+                        <strong>86%</strong>
+                        <span>Very Good</span>
                     </div>
 
                     <div class="progress">
-                        <div style="width:84%"></div>
+                        <i style="width:86%"></i>
                     </div>
 
-                    <small>Overall Performance: 84%</small>
+                    <p>Last reviewed: September 2026</p>
+
+                </div>
+
+
+                <div class="performance-card">
+
+                    <div class="employee-cell">
+                        <div class="person-avatar orange">AS</div>
+                        <div>
+                            <strong>Arjun Singh</strong>
+                            <small>Accountant</small>
+                        </div>
+                    </div>
+
+                    <div class="score">
+                        <strong>78%</strong>
+                        <span>Good</span>
+                    </div>
+
+                    <div class="progress">
+                        <i style="width:78%"></i>
+                    </div>
+
+                    <p>Last reviewed: September 2026</p>
 
                 </div>
 
@@ -975,80 +1151,43 @@
 </div>
 
 
-<!-- ADD EMPLOYEE MODAL -->
+<!-- ================= MODAL ================= -->
 
 <div class="modal" id="employeeModal">
 
     <div class="modal-box">
 
-        <div class="modal-header">
-            <h2>Add New Employee</h2>
+        <button class="modal-close"
+                onclick="closeEmployeeModal()">
+            ×
+        </button>
 
-            <button onclick="closeModal()">×</button>
-        </div>
+        <div class="modal-icon">♙</div>
 
-        <form id="employeeForm" class="form-grid">
+        <h2>Add New Employee</h2>
+        <p>Enter employee details below.</p>
 
-            <div>
-                <label>Full Name</label>
-                <input id="employeeName" type="text" placeholder="Enter employee name" required>
-            </div>
+        <label>Full Name</label>
+        <input id="newName"
+               placeholder="Enter employee name">
 
-            <div>
-                <label>Employee ID</label>
-                <input id="employeeId" type="text" placeholder="EMP004" required>
-            </div>
+        <label>Department</label>
+        <select id="newDepartment">
+            <option>IT</option>
+            <option>HR</option>
+            <option>Finance</option>
+            <option>Marketing</option>
+            <option>Operations</option>
+        </select>
 
-            <div>
-                <label>Email</label>
-                <input id="employeeEmail" type="email" placeholder="employee@email.com" required>
-            </div>
+        <label>Position</label>
+        <input id="newPosition"
+               placeholder="Enter position">
 
-            <div>
-                <label>Phone</label>
-                <input id="employeePhone" type="text" placeholder="Phone number">
-            </div>
-
-            <div>
-                <label>Department</label>
-
-                <select id="employeeDepartment">
-                    <option>Engineering</option>
-                    <option>Marketing</option>
-                    <option>Finance</option>
-                    <option>HR</option>
-                </select>
-
-            </div>
-
-            <div>
-                <label>Position</label>
-                <input id="employeePosition" type="text" placeholder="Job position" required>
-            </div>
-
-            <div>
-                <label>Salary</label>
-                <input id="employeeSalary" type="number" placeholder="₹ Salary" required>
-            </div>
-
-            <div>
-                <label>Joining Date</label>
-                <input id="employeeJoiningDate" type="date" required>
-            </div>
-
-        </form>
-
-        <div class="modal-actions">
-
-            <button class="cancel-btn" onclick="closeModal()">
-                Cancel
-            </button>
-
-            <button class="primary-btn" id="saveEmployeeButton" type="submit" form="employeeForm">
-                Add Employee
-            </button>
-
-        </div>
+        <button class="primary-btn modal-submit"
+                onclick="addEmployee()">
+            Add Employee
+        </button>
 
     </div>
 
